@@ -1,0 +1,31 @@
+{
+  "name": "seriescrawler",
+  "version": "0.1.0",
+  "description": "it's a web crawler to retrieve the episodes of a tv series and auto-download",
+  "main": "crawler.js",
+  "dependencies": {
+    "cheerio": "^0.22.0",
+    "decompress": "^4.2.0",
+    "nodemon": "^1.11.0",
+    "opensubtitles-api": "^4.0.0-rc2",
+    "request": "^2.81.0",
+    "request-promise-native": "^1.0.4",
+    "url-parse": "^1.1.8",
+    "webtorrent": "^0.98.18"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sylas Eckart",
+  "license": "ISC",
+  "keywords": [
+    "crawler",
+    "series"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://sylaseckart@bitbucket.org/sylaseckart/seriescrawler.git"
+  },
+  "homepage": "https://bitbucket.org/sylaseckart/seriescrawler#readme"
+}
