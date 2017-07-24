@@ -4,18 +4,18 @@
   "description": "it's a web crawler to retrieve the episodes of a tv series and auto-download",
   "main": "crawler.js",
   "dependencies": {
-    "cheerio": "^0.22.0",
-    "decompress": "^4.2.0",
-    "nodemon": "^1.11.0",
-    "opensubtitles-api": "^4.0.0-rc2",
+    "cheerio": "^1.0.0-rc.2",
+    "es6-promisify": "^5.0.0",
+    "opensubtitles-api": "^4.0.0",
     "request": "^2.81.0",
     "request-promise-native": "^1.0.4",
-    "url-parse": "^1.1.8",
-    "webtorrent": "^0.98.18"
+    "url-parse": "^1.1.9",
+    "webtorrent": "^0.98.19"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node crawler.js"
   },
   "author": "Sylas Eckart",
   "license": "ISC",

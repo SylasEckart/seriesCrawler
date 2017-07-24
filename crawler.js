@@ -8,16 +8,29 @@ const request = require('request')
 , client = new webtorrent()
 , fs = require('fs')
 , subtitles = require('./subtitles.js')
-, userPath = 'Vídeos'
+, userPath = 'Vídeos';
 let shows = ['preacher']
-findId();
+iterateEpisodes();
 
-function findId() {
+function iterateEpisodes() {
     if (shows.length > 0) {
         show = shows.shift()
         console.log(`baixando ${show}`)
         rp({uri: initial+show,json: true, simple:true})
-        .then(body => getEpisodesbyseason(body.id))
+        .then(response => {return rp({uri: `http://api.tvmaze.com/shows/${response.id}/episodes`,json: true})})
+        .then(response => {return createArray.init(response)})
+        .then(episodes =>{ 
+            if(episodes.length > 0){
+                let episodesByseason = []
+                for (episodeShow of episodes){
+                    episodesByseason.push(`https://1337x.to/search/${show} S${episodeShow.season}E${episodeShow.episode}/1/`)
+                }
+                listEpisodes(episodesByseason)
+            }
+            else{
+                iterateEpisodes()
+            }
+        })
         .catch(err => errorHandler(err));
     }
     else{
@@ -26,23 +39,8 @@ function findId() {
     }
     
 }
-function getEpisodesbyseason(specific){
-    rp({uri: `http://api.tvmaze.com/shows/${specific}/episodes`,json: true})
-    .then(body => {
-        if(createArray.init(body).length === 0){
-            console.log(`não saíram episódios novos`);
-            process.exit();
-        }
-        else{
-            listEpisodes(createArray.init(body))
-        }
-    })
-    .catch(err =>  errorHandler(err));
-}
 function listEpisodes(episodesByseason){
-    let episodeShow = episodesByseason.shift();
-    let episodeSite = `https://1337x.to/search/${show} S${episodeShow.season}E${episodeShow.episode}/1/`
-    console.log(episodeSite)
+    let episodeSite = episodesByseason.shift()
     rp({uri: episodeSite,transform: body => cheerio.load(body)})
     .then( $ => {
         let episodes = $('td.coll-1').children('.icon').next();
@@ -55,7 +53,7 @@ function listEpisodes(episodesByseason){
         }
         else {
             console.log('mais nenhum episódio pra baixar')
-            findId()
+            iterateEpisodes()
         }
     })
     .catch(err => errorHandler(err));
@@ -74,7 +72,8 @@ function filterEpisodes(episodes,episodesByseason,season){
 function retrieveMagnet(episode,episodesByseason,season){
     rp({uri: episode,transform: body => cheerio.load(body)})
     .then( $ => {
-        let magnet = $('.btn-magnet').attr('href');
+        let magnet = $("a:contains('Magnet Download')").attr('href');
+        console.log(magnet)
         torrentDownload(magnet,episodesByseason,season)
     })
     .catch(err => errorHandler(err));
@@ -93,7 +92,7 @@ function torrentDownload(magnet,episodesByseason,season){
         torrent.on('done', function () {
             console.log(`${torrent.name} acabou de baixar`);
             if(episodesByseason.length === 0 ){
-                findId()
+                iterateEpisodes()
             }
             else {
             listEpisodes(episodesByseason)
@@ -105,6 +104,6 @@ function errorHandler(err){
     if(err.statusCode === 404){
         console.log(err.error.previous.message)
         console.log('página não encontrada')
-        findId()
+        iterateEpisodes()
     }
 }
