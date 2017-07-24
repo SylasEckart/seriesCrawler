@@ -1,6 +1,5 @@
 const OpenSubtitles = require('opensubtitles-api')
 , os = new OpenSubtitles('OSTestUserAgentTemp')
-, decompress = require('decompress')
 , http = require('http')
 , fs = require('fs');
 
