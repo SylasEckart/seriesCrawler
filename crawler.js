@@ -8,36 +8,51 @@ const request = require('request')
 , client = new webtorrent()
 , fs = require('fs')
 , subtitles = require('./subtitles.js')
-, userPath = 'Vídeos';
-let shows = ['preacher']
-iterateEpisodes();
+, userPath = 'Vídeos'
+, inquirer = require('inquirer');
 
-function iterateEpisodes() {
-    if (shows.length > 0) {
-        show = shows.shift()
-        console.log(`baixando ${show}`)
-        rp({uri: initial+show,json: true, simple:true})
-        .then(response => {return rp({uri: `http://api.tvmaze.com/shows/${response.id}/episodes`,json: true})})
-        .then(response => {return createArray.init(response)})
-        .then(episodes =>{ 
-            if(episodes.length > 0){
-                let episodesByseason = []
-                for (episodeShow of episodes){
-                    episodesByseason.push(`https://1337x.to/search/${show} S${episodeShow.season}E${episodeShow.episode}/1/`)
-                }
-                listEpisodes(episodesByseason)
+var questions = [
+  {
+    type: 'input',
+    name: 'show',
+    message: 'Quer baixar qual serie?'
+  },
+  {
+    type: 'input',
+    name: 'initialSeason',
+    message: 'Quer baixar a partir de qual temporada ?'
+  },
+  {
+    type: 'input',
+    name: 'initialEpisode',
+    message: 'E a partir de qual episódio?',
+  }
+];
+
+inquirer
+.prompt(questions)
+.then(answers => {
+    iterateEpisodes(answers);
+});
+function iterateEpisodes(answers) {
+    console.log(`baixando ${answers.show}`)
+    rp({uri: initial+answers.show,json: true, simple:true})
+    .then(response => {return rp({uri: `http://api.tvmaze.com/shows/${response.id}/episodes`,json: true})})
+    .then(response => {return createArray.init(response,answers.initialSeason,answers.initialEpisode)})
+    .then(episodes =>{
+        if(episodes.length > 0){
+            let episodesByseason = []
+            for (episodeShow of episodes){
+                episodesByseason.push(`https://1337x.to/search/${answers.show} S${episodeShow.season}E${episodeShow.episode}/1/`)
             }
-            else{
-                iterateEpisodes()
-            }
-        })
-        .catch(err => errorHandler(err));
-    }
-    else{
-        console.log('Já baixei todas as séries')
-        process.exit()
-    }
-    
+            listEpisodes(episodesByseason)
+        }
+        else{
+            console.log('não tem episódio pra baixar')
+        }
+    })
+    .catch(err => errorHandler(err));
+
 }
 function listEpisodes(episodesByseason){
     let episodeSite = episodesByseason.shift()
@@ -79,7 +94,7 @@ function retrieveMagnet(episode,episodesByseason,season){
     .catch(err => errorHandler(err));
 }
 function torrentDownload(magnet,episodesByseason,season){
-    let pathtoSeries = `../vídeos/séries/${show}/temporada ${season}`
+    let pathtoSeries = `../vídeos/séries/nomedaserie/temporada ${season}`
     client.add(magnet, { path: pathtoSeries}, function (torrent) {
         console.log(`Baixando o arquivo ${torrent.name}`);
         console.log(`Baixando a legenda pro arquivo ${torrent.name}`)
@@ -92,7 +107,7 @@ function torrentDownload(magnet,episodesByseason,season){
         torrent.on('done', function () {
             console.log(`${torrent.name} acabou de baixar`);
             if(episodesByseason.length === 0 ){
-                iterateEpisodes()
+                console.log('não tem mais episódio pra baixar')
             }
             else {
             listEpisodes(episodesByseason)
@@ -104,6 +119,6 @@ function errorHandler(err){
     if(err.statusCode === 404){
         console.log(err.error.previous.message)
         console.log('página não encontrada')
-        iterateEpisodes()
+        console.log('não tem mais episódio pra baixar')
     }
 }

@@ -1,14 +1,13 @@
 const getDate = require('./getDate.js');
-let initialSeason = 1;
-let initialEpisode = 1;
-let initialDate;
 
 module.exports = {
-    init: function (body) {
+    init: function (body,initialSeason,initialEpisode) {
             let episodesByseason = []
             for (value of body) {
                 let season = value.season.toString();
                 let episode = value.number.toString();
+                season = initialSeason.length === 2 ? `0${season}` : `${season}`;
+                episode = initialEpisode.length === 2 ? `0${episode}` : `${episode}`;           
                 if (season == initialSeason && episode == initialEpisode){
                     var initialDate = value.airdate.replace(/-/g,'');
                 }
