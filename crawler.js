@@ -29,30 +29,22 @@ var questions = [
   }
 ];
 
-inquirer
-.prompt(questions)
-.then(answers => {
-    iterateEpisodes(answers);
-});
-function iterateEpisodes(answers) {
-    console.log(`baixando ${answers.show}`)
-    rp({uri: initial+answers.show,json: true, simple:true})
-    .then(response => {return rp({uri: `http://api.tvmaze.com/shows/${response.id}/episodes`,json: true})})
-    .then(response => {return createArray.init(response,answers.initialSeason,answers.initialEpisode)})
-    .then(episodes =>{
-        if(episodes.length > 0){
-            let episodesByseason = []
-            for (episodeShow of episodes){
-                episodesByseason.push(`https://1337x.to/search/${answers.show} S${episodeShow.season}E${episodeShow.episode}/1/`)
-            }
-            listEpisodes(episodesByseason)
-        }
-        else{
-            console.log('não tem episódio pra baixar')
-        }
-    })
-    .catch(err => errorHandler(err));
-
+iterateEpisodes(questions);
+async function iterateEpisodes(questions) {
+    let answers = await inquirer.prompt(questions)
+    let response = await rp({uri: initial+answers.show,json: true, simple:true})
+    response = await rp({uri: `http://api.tvmaze.com/shows/${response.id}/episodes`,json: true})
+    let episodes = await createArray.init(response,answers.initialSeason,answers.initialEpisode)
+    if(episodes.length > 0){ 
+        let episodesByseason = [] 
+        for (episodeShow of episodes){ 
+            episodesByseason.push(`https://1337x.to/search/${answers.show} S${episodeShow.season}E${episodeShow.episode}/1/`) 
+        } 
+        listEpisodes(episodesByseason) 
+    } 
+    else{ 
+            console.log('não tem episódio pra baixar') 
+    } 
 }
 function listEpisodes(episodesByseason){
     let episodeSite = episodesByseason.shift()
