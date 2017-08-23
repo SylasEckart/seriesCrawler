@@ -1,4 +1,4 @@
-const getDate = require('./getDate.js').init;
+const getDate = require('./get-date.js').init;
 
 exports.init = (body,initialSeason,initialEpisode) => {
         let episodesByseason = []

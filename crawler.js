@@ -1,6 +1,6 @@
 const rp = require('request-promise-native')
-, createArray = require('./helpers/createArray.js').init
-, errorHandler = require('./helpers/errorHandler.js').init
+, createArray = require('./helpers/create-array.js').init
+, errorHandler = require('./helpers/error-handler.js').init
 , initial = "http://api.tvmaze.com/singlesearch/shows?q="
 , cheerio = require('cheerio')
 , webtorrent = require('webtorrent')
@@ -58,7 +58,7 @@ async function retrieveMagnets(episodesByseason,show){
             let magnet = $("a:contains('Magnet Download')").attr('href');
             torrentDownload(magnet,episodesByseason,show,episodeObj.season,episodeObj.episode)
         }
-        else if(episodes.length > 0){
+        else if(episodesByseason.length > 0){
             console.log("erro na busca")
             retrieveMagnets(episodesByseason,show)
         }
@@ -76,7 +76,7 @@ function torrentDownload(magnet,episodesByseason,show,season,episode){
         console.log(`Baixando o arquivo ${torrent.name}`)
         console.log(`Baixando a legenda pro arquivo ${torrent.name}`)
         subtitles(torrent.name, pathtoSeries)
-        let bar = new ProgressBar('  downloading [:bar] :rate/mbps :percent :etas', {
+        let bar = new ProgressBar('  downloading [:bar] :percent :etas', {
             complete: '=',
             incomplete: ' ',
             width: 20,
@@ -91,7 +91,7 @@ function torrentDownload(magnet,episodesByseason,show,season,episode){
             console.log(`${torrent.name} acabou de baixar`);
             if(episodesByseason.length === 0 ){
                 console.log('não tem mais episódio pra baixar')
-                process.exit(1)
+                populateEpisodes(questions)
             }
             else {
             retrieveMagnets(episodesByseason,show)

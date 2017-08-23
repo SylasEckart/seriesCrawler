@@ -1,6 +1,6 @@
 {
   "name": "seriescrawler",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "it's a web crawler to retrieve the episodes of a tv series and auto-download",
   "main": "crawler.js",
   "dependencies": {
@@ -21,13 +21,12 @@
   },
   "author": "Sylas Eckart",
   "license": "ISC",
-  "keywords": [
-    "crawler",
-    "series"
-  ],
+  "engines" : { 
+    "node" : ">=7.6.0" 
+  },
   "repository": {
     "type": "git",
-    "url": "git+https://sylaseckart@bitbucket.org/sylaseckart/seriescrawler.git"
+    "url": "https://github.com/SylasEckart/seriesCrawler.git"
   },
   "homepage": "https://bitbucket.org/sylaseckart/seriescrawler#readme"
 }
