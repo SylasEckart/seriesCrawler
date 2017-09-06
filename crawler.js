@@ -2,11 +2,10 @@ const rp = require('request-promise-native')
 , createArray = require('./helpers/create-array.js').init
 , errorHandler = require('./helpers/error-handler.js').init
 , initial = "http://api.tvmaze.com/singlesearch/shows?q="
-, cheerio = require('cheerio')
-, webtorrent = require('webtorrent')
-, client = new webtorrent()
+, load = require('cheerio').load
+, client = require('webtorrent')()
 , subtitles = require('./subtitles.js').init
-, inquirer = require('inquirer')
+, inquirer = require('inquirer').prompt
 , ProgressBar = require('progress');
 
 let questions = [
@@ -29,10 +28,10 @@ let questions = [
 populateEpisodes(questions);
 async function populateEpisodes(questions) {
     try {
-        let answers = await inquirer.prompt(questions)
+        let answers = await inquirer(questions)
         let response = await rp({uri: initial+answers.show,json: true, simple:true})
         response = await rp({uri: `http://api.tvmaze.com/shows/${response.id}/episodes`,json: true})
-        let episodes = await createArray(response,answers.initialSeason,answers.initialEpisode)
+        let episodes = createArray(response,answers.initialSeason,answers.initialEpisode)
         if(episodes.length > 0){
             let episodesByseason = [] 
             for (episodeShow of episodes){ 
@@ -49,12 +48,12 @@ async function populateEpisodes(questions) {
 async function retrieveMagnets(episodesByseason,show){
     try {
         let episodeObj = episodesByseason.shift()
-        let $ = await rp({uri: episodeObj.site,transform: body => cheerio.load(body)}) 
+        let $ = await rp({uri: episodeObj.site,transform: body => load(body)}) 
         let episodes = $('td.coll-1').children('.icon').next();
         if(episodes.length > 0){
             let episode = $("a:contains('HDTV')").attr('href')
             episode = `https://1337x.to${episode}`
-            $ = await rp({uri: episode,transform: body => cheerio.load(body)})
+            $ = await rp({uri: episode,transform: body => load(body)})
             let magnet = $("a:contains('Magnet Download')").attr('href');
             torrentDownload(magnet,episodesByseason,show,episodeObj.season,episodeObj.episode)
         }
