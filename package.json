@@ -12,13 +12,17 @@
     "request": "^2.81.0",
     "request-promise-native": "^1.0.4",
     "url-parse": "^1.1.9",
-    "webtorrent": "^0.98.19"
+    "webtorrent": "^0.98.19",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "react-scripts": "1.0.14"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node crawler.js",
-    "debug": "nodemon --inspect crawler.js"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
   },
   "author": "Sylas Eckart",
   "license": "ISC",
