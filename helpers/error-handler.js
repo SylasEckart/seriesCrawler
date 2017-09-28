@@ -5,6 +5,7 @@ exports.init = err =>{
         console.log('não tem mais episódio pra baixar')
     }
     else{
+        debugger;
         console.log(err)
     }
 }
