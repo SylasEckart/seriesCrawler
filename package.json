@@ -2,10 +2,9 @@
   "name": "seriescrawler",
   "version": "1.0.0",
   "description": "it's a web crawler to retrieve the episodes of a tv series and auto-download",
-  "main": "crawler.js",
+  "main": "index.js",
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
-    "es6-promisify": "^5.0.0",
     "inquirer": "^3.2.1",
     "opensubtitles-api": "^4.0.0",
     "progress": "^2.0.0",
@@ -22,7 +21,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "electron": "electron ."
   },
   "author": "Sylas Eckart",
   "license": "ISC",
@@ -33,5 +33,5 @@
     "type": "git",
     "url": "https://github.com/SylasEckart/seriesCrawler.git"
   },
-  "homepage": "https://bitbucket.org/sylaseckart/seriescrawler#readme"
+  "homepage": "./"
 }

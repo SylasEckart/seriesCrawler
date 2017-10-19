@@ -29,11 +29,11 @@ populateEpisodes(questions);
 async function populateEpisodes(questions) {
     try {
         let answers = await inquirer(questions)
-        let response = await rp({uri: initial+answers.show,json: true, simple:true,headers: {'User-Agent': 'seriesCrawler'}})
-        response = await rp({uri: `https://oneom.tk/search/serial?tvmaze_id=${response.id}`, json: true,simple:true, headers: {'User-Agent': 'seriesCrawler'}})
+        let response = await rp({uri: initial+answers.show,json: true, simple:true,headers: {'User-Agent': 'seriesCrawler'}}) 
+        response = await rp({uri: `https://oneom.tk/search/serial?tvmaze_id=${response.id}`, json: true,simple:true, headers: {'User-Agent': 'seriesCrawler'}}) 
         response = await rp({uri: `https://oneom.tk/serial/${response.serials[0].id}`, json: true,simple:true, headers: {'User-Agent': 'seriesCrawler'}})
-        console.log(response);
-        let episodes = createArray(response,answers.initialSeason,answers.initialEpisode)
+        console.log(response.serial.ep);
+        debugger;
         if(episodes.length > 0){
             let episodesByseason = [] 
             for (episodeShow of episodes){ 
