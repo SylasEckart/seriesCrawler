@@ -2,7 +2,7 @@
   "name": "seriescrawler",
   "version": "1.0.0",
   "description": "it's a web crawler to retrieve the episodes of a tv series and auto-download",
-  "main": "index.js",
+  "main": "main.js",
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
     "inquirer": "^3.2.1",
@@ -16,18 +16,23 @@
     "react-dom": "^16.0.0",
     "react-scripts": "1.0.14"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "foreman": "^2.0.0"
+  },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "electron": "electron ."
+      "start": "nf start -p 3000"
+    , "build": "react-scripts build"
+    , "test": "react-scripts test --env=jsdom"
+    , "eject": "react-scripts eject"
+    , "electron": "electron ."
+    , "dev" : "nf start -p 3000"
+    , "electron-start": "node src/electron-wait-react"
+    , "react-start": "react-scripts start"
   },
   "author": "Sylas Eckart",
   "license": "ISC",
-  "engines" : { 
-    "node" : ">=7.6.0" 
+  "engines": {
+    "node": ">=7.6.0"
   },
   "repository": {
     "type": "git",

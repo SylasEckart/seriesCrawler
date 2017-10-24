@@ -1,10 +1,12 @@
-const electron = require('electron')
-, app = electron.app
-, BrowserWindow = electron.BrowserWindow
+const {app,BrowserWindow} = require('electron')
 , rp = require('request-promise-native')
-
-const path = require('path');
-const url = require('url');
+, path = require('path')
+, url = require('url')
+, startUrl = process.env.ELECTRON_START_URL || url.format({
+    pathname: path.join(__dirname, '/../build/index.html'),
+    protocol: 'file:',
+    slashes: true
+});
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -15,11 +17,12 @@ function createWindow() {
     mainWindow = new BrowserWindow({width: 800, height: 600});
 
     // and load the index.html of the app.
-    mainWindow.loadURL('http://localhost:3000');
-
-    // Open the DevTools.
+    mainWindow.loadURL(startUrl);    
+    rp({uri: `https://oneom.tk/serial/`, json: true,simple:true, headers: {'User-Agent': 'seriesCrawler'}})
+    .then(result =>{
+        global.sharedObject = {"result": result}
+    })
     mainWindow.webContents.openDevTools();
-
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {
         // Dereference the window object, usually you would store windows
@@ -53,5 +56,7 @@ app.on('activate', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
-rp({uri: `https://oneom.tk/serial/`, json: true,simple:true, headers: {'User-Agent': 'seriesCrawler'}})
-.then(result => mainWindow.webContents.send('data', result))
+
+ipcRenderer.on('store-data', function (store) {
+    console.log(store);
+});
