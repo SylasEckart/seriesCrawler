@@ -7,3 +7,7 @@ Atualmente funcionado via terminal, a versão 2.0 será uma aplicação desktop.
 Atualizaçao 05/10/2017
 
 O site 1337x.com do qual uso pra fazer os download agora usa um ddos protection que impede o download automático, como uma alternativa não só de resolver esse problema mas resolver problema futuros, estou atualizando a versão para uma versão que pegue o magnet link de vários sites de torrent diferentes.
+///
+
+A program to queue and download series, he sequentially download all episodes for a series.
+2.0 will feature a desktop app.
