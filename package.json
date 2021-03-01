@@ -5,14 +5,14 @@
   "main": "crawler.js",
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
-    "es6-promisify": "^5.0.0",
-    "inquirer": "^3.2.1",
-    "opensubtitles-api": "^4.0.0",
+    "es6-promisify": "^6.1.1",
+    "inquirer": "^7.3.3",
+    "opensubtitles-api": "^5.1.2",
     "progress": "^2.0.0",
     "request": "^2.81.0",
     "request-promise-native": "^1.0.4",
     "url-parse": "^1.1.9",
-    "webtorrent": "^0.98.19"
+    "webtorrent": "^0.114.1"
   },
   "devDependencies": {},
   "scripts": {
@@ -22,8 +22,8 @@
   },
   "author": "Sylas Eckart",
   "license": "ISC",
-  "engines" : { 
-    "node" : ">=7.6.0" 
+  "engines": {
+    "node": ">=7.6.0"
   },
   "repository": {
     "type": "git",

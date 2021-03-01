@@ -3,7 +3,7 @@ const rp = require('request-promise-native')
 , errorHandler = require('./helpers/error-handler.js').init
 , initial = "http://api.tvmaze.com/singlesearch/shows?q="
 , load = require('cheerio').load
-, client = require('webtorrent')()
+, Webtorrent = require('webtorrent')
 , subtitles = require('./subtitles.js').init
 , inquirer = require('inquirer').prompt
 , ProgressBar = require('progress');
@@ -70,7 +70,10 @@ async function retrieveMagnets(episodesByseason,show){
 
 function torrentDownload(magnet,episodesByseason,show,season,episode){
     ////pathtoSeries é totalmente relevante somente a minha máquina, navegue pelo folder pra escolher melhor lugar pra salvar
-    let pathtoSeries = `../../../../../Vídeos/séries/${show}/temporada ${season}/${episode}`
+    let 
+        pathtoSeries = `../../Vídeos/séries/${show}/temporada ${season}/${episode}`,
+        client = new Webtorrent
+
     client.add(magnet, { path: pathtoSeries}, torrent => {
         console.log(`Baixando o arquivo ${torrent.name}`)
         console.log(`Baixando a legenda pro arquivo ${torrent.name}`)
